@@ -1,16 +1,16 @@
 # This is a basic workflow to help you get started with Actions
 
-name: snowflake_deploy_LB
+name: Snowflake_DEV_Deployments
 
 on:
-  #push:
-    #branches:
-      #- main
-    #paths:
-      #- 'dbscripts/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'dbscripts/deploy/**'
   workflow_dispatch:
 jobs:	
-  LBJobDockerCLI:
+  Dev_Deploy:
     runs-on: ubuntu-latest
     #runs-on: liquibase-latest
     steps:
@@ -19,9 +19,9 @@ jobs:
     - name: Run 'Liquibase status' in a docker container
       uses: docker://liquibase/liquibase:latest
       with:
-        #args: --url=${{ secrets.SF_URL }} --username=${{ secrets.SF_USERNAME }} --password=${{ secrets.SF_PASSWORD }} --driver=${{ secrets.SF_DRIVER }} --default-schema-name=${{ secrets.SF_SCHEMA }} --changeLogFile=/dbscripts/deploy/MasterChangeLog.xml status
-        args: --url=${{ secrets.SF_URL }} --username=${{ secrets.SF_USERNAME }} --password=${{ secrets.SF_PASSWORD }} --default-schema-name=${{ secrets.SF_SCHEMA }} --changeLogFile=/dbscripts/deploy/MasterChangeLog.xml status
+        #args: --url=${{ secrets.SFDEV_URL }} --username=${{ secrets.SFDEV_USERNAME }} --password=${{ secrets.SFDEV_PASSWORD }} --driver=${{ secrets.SFDEV_DRIVER }} --default-schema-name=${{ secrets.SFDEV_SCHEMA }} --changeLogFile=/dbscripts/deploy/MasterChangeLog.xml status
+        args: --url=${{ secrets.SFDEV_URL }} --username=${{ secrets.SF_DEV_USERNAME }} --password=${{ secrets.SFDEV_PASSWORD }} --default-schema-name=${{ secrets.SFDEV_SCHEMA }} --changeLogFile=/dbscripts/deploy/MasterChangeLog.xml status
     - name:  Run 'Liquibase update' in a docker container
       uses: docker://liquibase/liquibase:latest
       with:
-        args: --url=${{ secrets.SF_URL }} --username=${{ secrets.SF_USERNAME }} --password=${{ secrets.SF_PASSWORD }} --default-schema-name=${{ secrets.SF_SCHEMA }} --changeLogFile=/dbscripts/deploy/MasterChangeLog.xml update
+        args: --url=${{ secrets.SFDEV_URL }} --username=${{ secrets.SFDEV_USERNAME }} --password=${{ secrets.SFDEV_PASSWORD }} --default-schema-name=${{ secrets.SFDEV_SCHEMA }} --changeLogFile=/dbscripts/deploy/MasterChangeLog.xml update
